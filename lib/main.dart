@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'features/auth/auth_gate.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -14,12 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TechNova Shop POS',
-      home: Scaffold(
-        appBar: AppBar(title: const Text('TechNova Shop POS')),
-        body: const Center(
-          child: Text('TechNova Shop POS', style: TextStyle(fontSize: 24)),
-        ),
-      ),
+      theme: ThemeData(useMaterial3: true),
+      home: const AuthGate(),
     );
   }
 }
