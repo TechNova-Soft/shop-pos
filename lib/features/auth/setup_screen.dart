@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
-import '../dashboard/dashboard_screen.dart';
+import '../shop_profile/shop_profile_screen.dart';
 
 class SetupScreen extends StatefulWidget {
   const SetupScreen({super.key});
@@ -50,7 +50,9 @@ class _SetupScreenState extends State<SetupScreen> {
       if (!mounted) return;
 
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+        MaterialPageRoute(
+          builder: (_) => const ShopProfileScreen(firstSetup: true),
+        ),
       );
     } catch (e) {
       if (!mounted) return;
