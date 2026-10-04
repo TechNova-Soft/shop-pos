@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../products/products_screen.dart';
 import '../inventory/inventory_screen.dart';
 import '../customers/customers_screen.dart';
+import '../reports/reports_screen.dart';
 import '../pos/pos_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -48,7 +49,11 @@ class DashboardScreen extends StatelessWidget {
             _DashboardCard(
               icon: Icons.bar_chart_outlined,
               title: 'වාර්තා',
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ReportsScreen()),
+                );
+              },
             ),
             _DashboardCard(
               icon: Icons.people_outline,
