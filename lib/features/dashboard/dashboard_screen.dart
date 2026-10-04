@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../products/products_screen.dart';
 import '../inventory/inventory_screen.dart';
 import '../customers/customers_screen.dart';
+import '../pos/pos_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -39,7 +40,10 @@ class DashboardScreen extends StatelessWidget {
             _DashboardCard(
               icon: Icons.point_of_sale_outlined,
               title: 'විකුණුම්',
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => const PosScreen()));
+              },
             ),
             _DashboardCard(
               icon: Icons.bar_chart_outlined,
