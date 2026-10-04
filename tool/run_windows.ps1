@@ -1,0 +1,1 @@
+flutter run -d windows --dart-define-from-file=tool/google_windows_config.json

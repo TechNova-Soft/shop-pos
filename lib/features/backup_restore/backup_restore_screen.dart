@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/backup_service.dart';
 import '../../services/auto_backup_service.dart';
+import 'google_drive_backup_screen.dart';
 
 class BackupRestoreScreen extends StatefulWidget {
   const BackupRestoreScreen({super.key});
@@ -238,6 +239,23 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                               : const Text('Backup එක සුරකින්න'),
                         ),
                       ),
+                      SizedBox(
+                        height: 50,
+                        child: OutlinedButton.icon(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                const GoogleDriveBackupScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.cloud_outlined),
+                          label: const Text(
+                            'Google Drive සම්බන්ධ කරන්න',
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -297,11 +315,14 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                 textAlign: TextAlign.center,
               ),
             ],
+
           ),
         ),
       ),
     );
   }
+
+
 
   InputDecoration _passwordDecoration(
     String label,
