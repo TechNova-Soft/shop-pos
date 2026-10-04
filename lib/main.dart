@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'features/auth/auth_gate.dart';
+import 'services/auto_backup_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await AutoBackupService.instance.start();
 
   runApp(const MyApp());
 }

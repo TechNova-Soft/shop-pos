@@ -13,16 +13,7 @@ class DatabaseService {
 
   Database? _database;
 
-  Future<Database> get database async {
-    if (_database != null) {
-      return _database!;
-    }
-
-    _database = await _openDatabase();
-    return _database!;
-  }
-
-  Future<Database> _openDatabase() async {
+  Future<String> getDatabasePath() async {
     final appSupportDirectory = await getApplicationSupportDirectory();
 
     final databaseDirectory = Directory(
@@ -33,7 +24,27 @@ class DatabaseService {
       await databaseDirectory.create(recursive: true);
     }
 
-    final databasePath = p.join(databaseDirectory.path, 'shop_pos.db');
+    return p.join(databaseDirectory.path, 'shop_pos.db');
+  }
+
+  Future<void> close() async {
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
+    }
+  }
+
+  Future<Database> get database async {
+    if (_database != null) {
+      return _database!;
+    }
+
+    _database = await _openDatabase();
+    return _database!;
+  }
+
+  Future<Database> _openDatabase() async {
+    final databasePath = await getDatabasePath();
 
     return databaseFactory.openDatabase(
       databasePath,

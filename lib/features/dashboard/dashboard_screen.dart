@@ -4,6 +4,7 @@ import '../products/products_screen.dart';
 import '../inventory/inventory_screen.dart';
 import '../customers/customers_screen.dart';
 import '../reports/reports_screen.dart';
+import '../backup_restore/backup_restore_screen.dart';
 import '../pos/pos_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -61,6 +62,17 @@ class DashboardScreen extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const CustomersScreen()),
+                );
+              },
+            ),
+            _DashboardCard(
+              icon: Icons.backup_outlined,
+              title: 'දත්ත සුරැකීම',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const BackupRestoreScreen(),
+                  ),
                 );
               },
             ),
