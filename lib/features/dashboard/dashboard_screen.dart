@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../products/products_screen.dart';
+import '../inventory/inventory_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -28,7 +29,11 @@ class DashboardScreen extends StatelessWidget {
             _DashboardCard(
               icon: Icons.warehouse_outlined,
               title: 'තොගය',
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const InventoryScreen()),
+                );
+              },
             ),
             _DashboardCard(
               icon: Icons.point_of_sale_outlined,
