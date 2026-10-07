@@ -22,6 +22,7 @@ class GoogleDriveService {
       'https://www.googleapis.com/auth/userinfo.email';
 
   static const String _backupFolderName = 'TechNova POS Backups';
+  static const int _maxGoogleDriveBackups = 20;
 
   late final GoogleSignIn _googleSignIn = GoogleSignIn(
     params: GoogleSignInParams(
@@ -357,6 +358,9 @@ class GoogleDriveService {
       DateTime.now().toIso8601String(),
     );
 
+// Keep only the latest 20 backup files in Google Drive.
+    await cleanupOldBackups();
+
     return fileId;
   }
 
@@ -372,6 +376,84 @@ class GoogleDriveService {
     }
 
     return drive.DriveApi(client);
+  }
+
+  Future<void> cleanupOldBackups() async {
+    try {
+      debugPrint(
+        'Checking Google Drive backup retention...',
+      );
+
+      final api = await _driveApi();
+      final folderId = await ensureBackupFolder();
+
+      final result = await api.files.list(
+        q: "'$folderId' in parents "
+            "and name contains '.tnbackup' "
+            "and trashed = false",
+        spaces: 'drive',
+        $fields: 'files(id,name,mimeType,createdTime,modifiedTime)',
+        pageSize: 100,
+        orderBy: 'createdTime asc',
+      );
+
+      final backups = result.files ?? <drive.File>[];
+
+      debugPrint(
+        'Google Drive backup count: ${backups.length}',
+      );
+
+      if (backups.length <= _maxGoogleDriveBackups) {
+        debugPrint(
+          'Backup count is within the limit of $_maxGoogleDriveBackups.',
+        );
+        return;
+      }
+
+      final deleteCount =
+          backups.length - _maxGoogleDriveBackups;
+
+      debugPrint(
+        'Deleting $deleteCount old backup(s)...',
+      );
+
+      for (int i = 0; i < deleteCount; i++) {
+        final oldBackup = backups[i];
+
+        final fileId = oldBackup.id;
+
+        if (fileId == null || fileId.isEmpty) {
+          continue;
+        }
+
+        try {
+          await api.files.delete(fileId);
+
+          debugPrint(
+            'Old backup deleted: ${oldBackup.name} '
+                '| ID: $fileId',
+          );
+        } catch (error) {
+          // Retention failure should not break the successful backup.
+          debugPrint(
+            'Failed to delete old backup '
+                '${oldBackup.name}: $error',
+          );
+        }
+      }
+
+      debugPrint(
+        'Google Drive backup retention cleanup completed.',
+      );
+    } catch (error, stackTrace) {
+      // Backup itself should remain successful even if cleanup fails.
+      debugPrint(
+        'Google Drive backup cleanup failed: $error',
+      );
+      debugPrint(
+        stackTrace.toString(),
+      );
+    }
   }
 
   // ---------------------------------------------------------------------------
